@@ -1,0 +1,114 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Socios Karazuno</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rojo: '#b91c1c',
+            rojoOscuro: '#991b1b',
+            grisFondo: '#f8f9fa',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-grisFondo font-sans text-gray-800 flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="bg-rojo text-white w-64 flex flex-col justify-between transition-all duration-300">
+    <div>
+      <!-- Logo -->
+      <div class="flex items-center justify-center py-6 border-b border-red-700">
+        <a href="/" class="hover:opacity-80 transition">
+          <img src="{% static 'img/logo.jpeg' %}" alt="Logo" class="w-16 h-16 object-contain">
+        </a>
+      </div>
+
+      <!-- Menú -->
+      <nav class="mt-6">
+        <ul>
+          <li>
+            <a href="/" class="flex items-center px-6 py-3 bg-white/10 rounded-r-full text-white font-semibold">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
+              </svg>
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a href="{% slugurl 'deportes' %}" class="flex items-center px-6 py-3 hover:bg-white/10">
+               <span class="ml-3">Deportes y Actividades</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% slugurl 'eventos' %}" class="flex items-center px-6 py-3 hover:bg-white/10">
+               <span class="ml-3">Eventos y Torneos</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% slugurl 'galeria' %}" class="flex items-center px-6 py-3 hover:bg-white/10">
+              <span class="ml-3">Galeria</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% slugurl 'calendario' %}" class="flex items-center px-6 py-3 hover:bg-white/10">
+              <span class="ml-3">Calendario</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% slugurl 'resultados' %}" class="flex items-center px-6 py-3 hover:bg-white/10">
+                <span class="ml-3">Ranking Partidos</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- 📄 Contenido principal -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Encabezado -->
+    <header class="bg-white shadow px-6 py-6 flex justify-between items-center">
+      <h1 class="text-xl font-semibold text-gray-700"><span class="text-rojo"></span></h1>
+    </header>
+
+    <!-- Contenido -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      {% block content %}
+      <!-- Aquí irán tus secciones: tarjetas, tablas, etc. -->
+      {% endblock %}
+    </main>
+
+    <!-- Pie -->
+    <footer class="bg-white shadow px-6 py-4 flex justify-between items-center text-center">
+      <div class="container mx-auto px-6 py-6 text-center">
+        <p>&copy; {{ now|date:"Y" }} Socios Karazuno - Todos los derechos reservados.</p>
+    </footer>
+
+  </div>
+{% block extra_js %}{% endblock %}
+</body>
+
+</html>

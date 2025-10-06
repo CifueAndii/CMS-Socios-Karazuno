@@ -1,0 +1,55 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ page.title }}{% endblock %} | Mi Club</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <!-- 🧭 Encabezado -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">
+        🏠 Mi Club
+      </a>
+
+      <nav>
+        <ul class="flex space-x-6 text-lg">
+          <li><a href="/" class="hover:text-blue-500">Inicio</a></li>
+          <li><a href="{% slugurl 'eventos' %}" class="hover:text-blue-500">Eventos</a></li>
+          <li><a href="{% slugurl 'deportes' %}" class="hover:text-blue-500">Deportes</a></li>
+          <li><a href="{% slugurl 'galeria' %}" class="hover:text-blue-500">Galería</a></li>
+          <li><a href="{% slugurl 'resultados' %}" class="hover:text-blue-500">Resultados</a></li> 
+          <li><a href="{% slugurl 'calendario' %}" class="hover:text-blue-500">Calendario</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 📄 Contenido principal -->
+  <main class="container mx-auto px-6 py-8">
+    {% block content %}
+    <!-- Aquí se cargará el contenido de cada página -->
+    {% endblock %}
+  </main>
+
+  <!-- 📞 Pie de página -->
+  <footer class="bg-gray-800 text-gray-200 mt-12">
+    <div class="container mx-auto px-6 py-6 text-center">
+      <p>&copy; {{ now|date:"Y" }} Mi Club - Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  <!-- jQuery y DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>
