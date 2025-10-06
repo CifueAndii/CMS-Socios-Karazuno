@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }} {% endblock %}
+
+{% block content %}
+
+<div class="container mx-auto px-6 py-12">
+  <div class="flex flex-col md:flex-row items-center gap-10 mb-12">
+    <div class="w-full text-center">
+      <h1 class="text-4xl font-extrabold text-gray-800 mb-4">
+        {{ page.title }}
+      </h1>
+      <p class="text-gray-600 text-lg mb-6">{{ page.descripcion|richtext }}</p>
+
+      <div class="bg-red-50 border-l-4 border-rojo p-5 rounded-lg shadow-sm">
+        <h2 class="text-xl font-bold text-rojo mb-3">📋 Información</h2>
+        <ul class="space-y-2 text-gray-700">
+          {% if page.fecha_inicio %}
+            <li><strong>Fecha Inicio:</strong> {{ page.fecha_inicio }}</li>
+          {% endif %}
+          {% if page.fecha_fin %}
+            <li><strong>Fecha Fin:</strong> {{ page.fecha_fin }}</li>
+          {% endif %}
+          {% if page.lugar %}
+            <li><strong>Lugar:</strong> {{ page.lugar }}</li>
+          {% endif %}
+          {% if page.aforo %}
+            <li><strong>Aforo:</strong> {{ page.aforo }}</li>
+          {% endif %}
+          <li><strong>Inscripción abierta:</strong> 
+            {{ page.inscripcion_abierta|yesno:"Sí,No" }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+    <a href="{{ page.get_parent.url }}" class="mt-auto inline-block text-center px-4 py-2 bg-rojo text-white rounded-lg font-semibold hover:bg-red-700 transition">
+      ← Volver a Eventos
+    </a>
+        <a href="{% slugurl 'calendario' %}" class="mt-auto inline-block text-center px-4 py-2 bg-rojo text-white rounded-lg font-semibold hover:bg-red-700 transition">
+      📅 Ver en Calendario
+    </a>
+</div>
+{% endblock %}
+

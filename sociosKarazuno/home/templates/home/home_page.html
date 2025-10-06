@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block extra_head %}
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+
+  <section class="text-center">
+    <h1 class="text-4xl font-semibold text-gray-700">Socios <span class="text-rojo">Karazuno</span></h1>
+    <p class="text-lg text-gray-600">Descubrí nuestros deportes, eventos, torneos y calendario de actividades.</p>
+  </section>
+
+  <!-- Carrusel -->
+  <div class="swiper mySwiper rounded-2xl overflow-hidden shadow-2xl border-4 border-red-700 max-w-4xl mx-auto">
+    <div class="swiper-wrapper">
+      {% for item in page.carrusel %}
+        {% if item.block_type == 'imagen' %}
+          <div class="swiper-slide">
+            {% image item.value fill-1000x400 class="w-full max-h-[400px] object-cover" %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    <!-- Controles -->
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next text-red-700"></div>
+    <div class="swiper-button-prev text-red-700"></div>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper(".mySwiper", {
+      loop: true,
+      autoplay: { delay: 3000, disableOnInteraction: false },
+      pagination: { el: ".swiper-pagination", clickable: true },
+      navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+      effect: "fade",
+      fadeEffect: { crossFade: true },
+    });
+  </script>
+{% endblock %}

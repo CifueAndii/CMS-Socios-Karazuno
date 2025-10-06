@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+  <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">{{ page.title }}</h1>
+  <div class="text-center text-gray-600 mb-10">
+    {{ page.descripcion|richtext }}
+  </div>
+
+  <!-- 🔍 Selector de vista y filtro -->
+  <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+    <div class="flex">
+      <button id="btn-grid" class="px-4 py-2 bg-red-600 text-white rounded-l hover:bg-red-700">Cuadrícula</button>
+      <button id="btn-slider" class="px-4 py-2 bg-gray-300 rounded-r hover:bg-gray-400">Slider</button>
+    </div>
+
+    <select id="filtro-tipo" class="px-4 py-2 border rounded-lg text-red-700 shadow-sm focus:ring focus:ring-black-300">
+      <option value="todos">Mostrar todo</option>
+      <option value="imagen">🖼️ Imágenes</option>
+      <option value="video">🎥 Videos</option>
+    </select>
+  </div>
+
+  <!-- 🧱 Galería en cuadrícula -->
+  <div id="galeria-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {% for item in page.elementos %}
+      {% if item.block_type == 'multimedia' %}
+        {% if item.value.tipo == 'imagen' and item.value.imagen %}
+          <div class="rounded overflow-hidden shadow hover:shadow-lg transition" data-tipo="imagen">
+            {% image item.value.imagen fill-400x300 class="w-full h-60 object-cover" %}
+            {% if item.value.descripcion %}
+              <p class="p-3 text-center text-black-1000 text-sm">{{ item.value.descripcion }}</p>
+            {% endif %}
+          </div>
+        {% elif item.value.tipo == 'video' and item.value.video_url %}
+          <div class="aspect-w-16 aspect-h-9" data-tipo="video">
+            <iframe class="w-full h-60 rounded" src="{{ item.value.video_url }}" frameborder="0" allowfullscreen></iframe>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Slider -->
+  <div id="galeria-slider" class="hidden relative">
+    <div class="swiper mySwiper rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+      <div class="swiper-wrapper">
+        {% for item in page.elementos %}
+          {% if item.block_type == 'multimedia' %}
+            <div class="swiper-slide" data-tipo="{{ item.value.tipo }}">
+              {% if item.value.tipo == 'imagen' and item.value.imagen %}
+                {% image item.value.imagen fill-800x600 class="rounded-lg mx-auto" %}
+              {% elif item.value.tipo == 'video' and item.value.video_url %}
+                <iframe class="w-full h-[300px] rounded" src="{{ item.value.video_url }}" frameborder="0" allowfullscreen></iframe>
+              {% endif %}
+              {% if item.value.descripcion %}
+                <p class="text-center mt-3 text-gray-700">{{ item.value.descripcion }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const grid = document.getElementById("galeria-grid");
+      const slider = document.getElementById("galeria-slider");
+      const filtro = document.getElementById("filtro-tipo");
+
+      // 🔁 Vista cuadrícula / slider
+      document.getElementById("btn-grid").addEventListener("click", () => {
+        grid.classList.remove("hidden");
+        slider.classList.add("hidden");
+      });
+
+      document.getElementById("btn-slider").addEventListener("click", () => {
+        grid.classList.add("hidden");
+        slider.classList.remove("hidden");
+      });
+
+      // 🎚️ Inicializar slider (Swiper)
+      const swiper = new Swiper(".mySwiper", {
+        loop: true,
+        spaceBetween: 30,
+        pagination: { el: ".swiper-pagination", clickable: true },
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+      });
+
+      // 🔍 Filtro dinámico por tipo
+      filtro.addEventListener("change", function() {
+        const tipoSeleccionado = this.value;
+        const itemsGrid = grid.querySelectorAll("[data-tipo]");
+        const itemsSlider = slider.querySelectorAll(".swiper-slide");
+
+        itemsGrid.forEach(el => {
+          el.style.display = (tipoSeleccionado === "todos" || el.dataset.tipo === tipoSeleccionado) ? "" : "none";
+        });
+
+        itemsSlider.forEach(el => {
+          el.style.display = (tipoSeleccionado === "todos" || el.dataset.tipo === tipoSeleccionado) ? "" : "none";
+        });
+
+        swiper.update();
+      });
+    });
+  </script>
+{% endblock %}

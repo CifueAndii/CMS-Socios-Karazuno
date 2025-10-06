@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }} | Club Karazuno{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+  <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
+     {{ page.title }}
+  </h1>
+
+  {% if eventos %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for e in eventos %}
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition transform hover:-translate-y-1">
+          
+          <div class="p-6 flex flex-col justify-between h-64">
+            <div>
+              <h2 class="text-xl font-bold text-rojo mb-2">{{ e.title }}</h2>
+              <p class="text-sm text-gray-600 mb-2">
+                📅 <span class="font-semibold">{{ e.fecha_inicio|date:"d/m/Y" }}</span>
+                {% if e.fecha_fin %}
+                  - <span class="font-semibold">{{ e.fecha_fin|date:"d/m/Y" }}</span>
+                {% endif %}
+              </p>
+              {% if e.lugar %}
+                <p class="text-gray-700 text-sm mb-3">📍 {{ e.lugar }}</p>
+              {% endif %}
+              <p class="text-gray-600 text-sm mb-4">{{ e.resumen|truncatechars:120 }}</p>
+            </div>
+
+            <a href="{{ e.url }}" class="mt-auto inline-block text-center px-4 py-2 bg-rojo text-white rounded-lg font-semibold hover:bg-red-700 transition">
+              Ver detalles →
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center text-gray-500 text-lg mt-10">
+       No hay eventos disponibles por el momento.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
