@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+  <div class="flex flex-col md:flex-row items-center gap-10 mb-12">
+    {% if page.imagen %}
+      <div class="md:w-1/2 rounded-2xl overflow-hidden shadow-lg">
+        {% image page.imagen fill-600x400 class="w-full h-full object-cover" %}
+      </div>
+    {% endif %}
+
+    <div class="md:w-1/2">
+      <h1 class="text-4xl font-extrabold text-gray-800 mb-4">
+        {{ page.title }}
+      </h1>
+      <p class="text-gray-600 text-lg mb-6">{{ page.descripcion|richtext }}</p><br>
+
+      <div class="bg-red-50 border-l-4 border-rojo p-5 rounded-lg shadow-sm">
+        <h2 class="text-xl font-bold text-rojo mb-3">📋 Información</h2>
+        <ul class="space-y-2 text-gray-700">
+          {% if page.entrenador %}
+            <li><strong>Entrenador:</strong> {{ page.entrenador }}</li>
+          {% endif %}
+          {% if page.horario %}
+            <li><strong>Horario:</strong> {{ page.horario }}</li>
+          {% endif %}
+          {% if page.ubicacion %}
+            <li><strong>Ubicación:</strong> {{ page.ubicacion }}</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+    <a href="{{ page.get_parent.url }}" class="mt-auto inline-block text-center px-4 py-2 bg-rojo text-white rounded-lg font-semibold hover:bg-red-700 transition">
+      ← Volver a Deportes
+    </a>
+</div>
+{% endblock %}
